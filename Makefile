@@ -15,3 +15,9 @@ stop:
 
 rm:
 	docker rm $(DB_CONTAINER)
+
+seed:
+	ts-node src/seed/seed.ts
+
+clear-db:
+	ts-node src/seed/clearDB.ts
