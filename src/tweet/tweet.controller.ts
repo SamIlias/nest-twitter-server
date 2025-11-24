@@ -11,6 +11,7 @@ import {
 import { TweetService } from './tweet.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateTweetDto } from './dto/create-tweet.dto';
+import { User } from '../entities/user.entity';
 
 @Controller('tweets')
 export class TweetController {
@@ -33,7 +34,7 @@ export class TweetController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Req() req, @Body() dto: CreateTweetDto) {
+  create(@Req() req: Request & { user: User }, @Body() dto: CreateTweetDto) {
     return this.tweetService.create(req.user.id, dto);
   }
 }

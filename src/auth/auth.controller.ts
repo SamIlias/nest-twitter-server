@@ -1,7 +1,9 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import type { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
+import { User } from '../entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -12,9 +14,31 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  @UseGuards(AuthGuard('local'))
   @Post('login')
-  login(@Req() req) {
-    return this.authService.login(req.user);
+  @UseGuards(AuthGuard('local'))
+  login(@Req() req: Request & { user: User }, @Res() res: Response) {
+    const { access_token } = this.authService.login(req.user);
+
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({ message: 'ok' });
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('access_token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      path: '/api',
+    });
+
+    return { message: 'Logged out successfully' };
   }
 }

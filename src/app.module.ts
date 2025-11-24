@@ -7,10 +7,15 @@ import { UserModule } from './user/user.module';
 import { TweetModule } from './tweet/tweet.module';
 import { typeormConfig } from './config/ormconfig';
 import { SeederModule } from './seed/seeder.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeormConfig),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     AuthModule,
     UserModule,
     TweetModule,
