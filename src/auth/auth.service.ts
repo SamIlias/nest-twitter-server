@@ -32,6 +32,16 @@ export class AuthService {
     return user;
   }
 
+  async validateGoogleUser(email: string) {
+    const user = await this.userService.getByEmail(email);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   login(user: User) {
     const payload = { id: user.id, email: user.email };
     return {
