@@ -5,6 +5,7 @@ import {
   Post,
   Req,
   Res,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
@@ -12,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../entities/user.entity';
+import { GoogleAuthExceptionFilter } from './filters/google-auth-exception.filter';
 
 @Controller('auth')
 export class AuthController {
@@ -56,6 +58,7 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
+  @UseFilters(GoogleAuthExceptionFilter)
   googleAuthRedirect(
     @Req() req: Request & { user: User },
     @Res() res: Response,
