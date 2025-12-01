@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import type { Request } from 'express';
 import { User } from '../entities/user.entity';
+import { UpdateUserPasswordDto } from './dto/update-password.dto';
 
 @Controller('users')
 export class UserController {
@@ -45,11 +47,35 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Patch('me/password')
+  async updatePassword(
+    @Req() req: Request & { user: User },
+    @Body() dto: UpdateUserPasswordDto,
+  ) {
+    const userId = req.user.id;
+
+    return this.userService.updatePassword(
+      userId,
+      dto.oldPassword,
+      dto.newPassword,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('follow/:id')
   async follow(
     @Req() req: Request & { user: User },
-    @Param('id') targetUserId: number,
+    @Param('id', ParseIntPipe) targetUserId: number,
   ) {
     return this.userService.follow(req.user.id, targetUserId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('unfollow/:id')
+  async unfollow(
+    @Req() req: Request & { user: User },
+    @Param('id', ParseIntPipe) targetUserId: number,
+  ) {
+    return this.userService.unfollow(req.user.id, targetUserId);
   }
 }

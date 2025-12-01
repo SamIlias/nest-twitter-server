@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -77,6 +78,28 @@ export class UserService {
   async update(id: number, dto: UpdateUserDto): Promise<ResponseUserDto> {
     await this.repo.update(id, dto);
     const updated = await this.loadUser(id);
+    return this.mapUserToDto(updated);
+  }
+
+  async updatePassword(
+    id: number,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<ResponseUserDto> {
+    const user = await this.repo.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isValid) {
+      throw new BadRequestException('Old password is incorrect');
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+
+    const updated = await this.repo.save(user);
     return this.mapUserToDto(updated);
   }
 

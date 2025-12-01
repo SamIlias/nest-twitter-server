@@ -7,6 +7,5 @@ export class UpdateUserDto {
   status?: string;
   avaUrl?: string;
   bannerUrl?: string;
-  password?: string;
   birthDate?: Date;
 }
