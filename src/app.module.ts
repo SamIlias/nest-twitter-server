@@ -8,6 +8,7 @@ import { TweetModule } from './tweet/tweet.module';
 import { typeormConfig } from './config/ormconfig';
 import { SeederModule } from './seed/seeder.module';
 import { ConfigModule } from '@nestjs/config';
+import { TweetLikeModule } from './tweet-like/tweet-like.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     UserModule,
     TweetModule,
+    TweetLikeModule,
     SeederModule,
   ],
   controllers: [AppController],

@@ -4,5 +4,4 @@ export interface ResponseTweetDto {
   textContent: string;
   createdAt: string;
   image?: string | null;
-  likes: number;
 }

@@ -24,6 +24,6 @@ export class Tweet {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ default: 0 })
-  likes: number;
+  // @Column({ default: 0 })
+  // likes: number;
 }

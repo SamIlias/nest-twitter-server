@@ -23,7 +23,6 @@ export class TweetService {
       textContent: tweet.textContent,
       createdAt: tweet.createdAt.toISOString(),
       image: tweet.image ?? null,
-      likes: tweet.likes,
     };
   }
 

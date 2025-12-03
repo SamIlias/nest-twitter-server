@@ -4,6 +4,7 @@ import { User } from '../entities/user.entity';
 import { Tweet } from '../entities/tweet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { TweetLike } from '../entities/tweet-like.entity';
 
 @Injectable()
 export class SeederService {
@@ -12,11 +13,14 @@ export class SeederService {
     private userRepo: Repository<User>,
     @InjectRepository(Tweet)
     private tweetRepo: Repository<Tweet>,
+    @InjectRepository(TweetLike)
+    private tweetLikeRepo: Repository<TweetLike>,
   ) {}
 
   async seed(
     usersData: CreateUserDto[],
     tweetsData: Partial<Tweet>[],
+    tweetLikesData: Partial<TweetLike>[],
   ): Promise<void> {
     const users = this.userRepo.create(usersData);
     await this.userRepo.save(users);
@@ -45,6 +49,15 @@ export class SeederService {
     ]);
 
     await this.tweetRepo.save(tweets);
+
+    const tweetLikes = tweetLikesData.map(({ user, tweet }) =>
+      this.tweetLikeRepo.create({
+        user: users[user!.id],
+        tweet: tweets[tweet!.id],
+      }),
+    );
+
+    await this.tweetLikeRepo.save(tweetLikes);
 
     console.log('Database seeded successfully');
   }
