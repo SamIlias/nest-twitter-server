@@ -22,7 +22,7 @@ export class TweetService {
       userId: tweet.user.id,
       textContent: tweet.textContent,
       createdAt: tweet.createdAt.toISOString(),
-      image: tweet.image ?? null,
+      images: tweet.images ?? null,
     };
   }
 

@@ -21,9 +21,6 @@ export class Tweet {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ nullable: true })
-  image: string;
-
-  // @Column({ default: 0 })
-  // likes: number;
+  @Column('simple-json', { nullable: true })
+  images?: string[];
 }

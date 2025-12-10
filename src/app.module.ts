@@ -9,6 +9,8 @@ import { typeormConfig } from './config/ormconfig';
 import { SeederModule } from './seed/seeder.module';
 import { ConfigModule } from '@nestjs/config';
 import { TweetLikeModule } from './tweet-like/tweet-like.module';
+import { MinioModule } from './minio/minio.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { TweetLikeModule } from './tweet-like/tweet-like.module';
     TweetModule,
     TweetLikeModule,
     SeederModule,
+    MinioModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

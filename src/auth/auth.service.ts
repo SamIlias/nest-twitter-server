@@ -21,10 +21,12 @@ export class AuthService {
     }
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
-    return this.userService.create({
+    await this.userService.create({
       ...dto,
       password: passwordHash,
     });
+
+    return this.userService.getByEmail(dto.email);
   }
 
   async validateUser(email: string, password: string) {

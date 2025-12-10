@@ -1,4 +1,4 @@
 export class CreateTweetDto {
   textContent: string;
-  image?: string;
+  images?: string[];
 }

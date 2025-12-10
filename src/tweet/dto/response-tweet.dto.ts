@@ -3,5 +3,5 @@ export interface ResponseTweetDto {
   userId: number;
   textContent: string;
   createdAt: string;
-  image?: string | null;
+  images?: string[] | null;
 }
